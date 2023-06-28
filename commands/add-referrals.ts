@@ -15,8 +15,8 @@ import invalidBonus from "../lib/utils/invalidBonus";
 import config from "../config";
 
 export default {
-    name: "add-invites",
-    description: "Add invitations to a member",
+    name: "add-referrals",
+    description: "Add referrals to a member",
     options: [
         {
             name: "member",
