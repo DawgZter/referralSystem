@@ -8,7 +8,7 @@ import config from "../config";
 import linkSync from "../lib/sync/link";
 
 export default {
-    name: "create-invite",
+    name: "myinvitelink",
     description: "Create an invitation link that never expires",
     type: ApplicationCommandType.ChatInput,
     async run(interaction: CommandInteraction, client: MyClient) {
