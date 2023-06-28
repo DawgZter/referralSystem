@@ -4,7 +4,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/enes-th/discord-invite-tracker?label=Last%20Update)
 ![GitHub open issues](https://img.shields.io/github/issues/enes-th/discord-invite-tracker?label=Issues)
 
-This is a Discord bot that tracks invitations for your server. You can view the leaderboard to see which members have invited the most people, reset a member's invitation count, and more. 
+Test. This is a Discord bot that tracks invitations for your server. You can view the leaderboard to see which members have invited the most people, reset a member's invitation count, and more. 
 
 ## Requirements
 * Node.js +16.x.x
