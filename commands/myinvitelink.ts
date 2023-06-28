@@ -18,8 +18,8 @@ export default {
         if (Array.from(links.values()).includes(member.user.id)) {
             const code = Array.from(links.entries()).find(([code, memberId]) => memberId === member.user.id)!;
             const embed = new EmbedBuilder()
-                .setTitle("Error!")
-                .setDescription(`**${member.user.username}** you already **have** an invitation link (*${code[0]}*)`)
+                .setTitle("Success!")
+                .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("Red")
             return interaction.editReply({ embeds: [embed] })
