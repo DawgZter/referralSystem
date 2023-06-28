@@ -10,7 +10,7 @@ import config from "../config";
 import { LeaderboardStats } from "../lib/types/interface/invite";
 
 export default {
-    name: "leaderboard",
+    name: "referral-leaderboard",
     description: "View leaderboard",
     type: ApplicationCommandType.ChatInput,
     async run(interaction: CommandInteraction, client: MyClient) {
