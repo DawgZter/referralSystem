@@ -12,7 +12,7 @@ import inviteSync from "../lib/sync/invite";
 import config from "../config";
 
 export default {
-    name: "reset-invites",
+    name: "reset-referrals",
     description: "Reset a member's invites to 0",
     options: [
         {
