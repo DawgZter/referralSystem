@@ -13,7 +13,7 @@ import config from "../config";
 
 export default {
     name: "reset-referrals",
-    description: "Reset a member's invites to 0",
+    description: "Reset a member's referral count to 0",
     options: [
         {
             name: "member",
