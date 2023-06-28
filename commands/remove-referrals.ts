@@ -14,7 +14,7 @@ import invalidBonus from "../lib/utils/invalidBonus";
 import config from "../config";
 
 export default {
-    name: "remove-invites",
+    name: "remove-referrals",
     description: "Remove invitations from a member",
     options: [
         {
