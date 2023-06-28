@@ -25,7 +25,8 @@ export default {
                 inviter varchar(25) NOT NULL,
                 code varchar(10) NOT NULL,
                 fake tinyint(1) NOT NULL,
-                inactive tinyint(1) NOT NULL
+                inactive tinyint(1) NOT NULL,
+                active tinyint(1) DEFAULT 0 NOT NULL
             );`,
             `CREATE TABLE IF NOT EXISTS leaves (
                 id int(11) PRIMARY KEY AUTO_INCREMENT,
