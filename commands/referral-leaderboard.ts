@@ -11,7 +11,7 @@ import { LeaderboardStats } from "../lib/types/interface/invite";
 
 export default {
     name: "referral-leaderboard",
-    description: "View leaderboard",
+    description: "View referral leaderboard",
     type: ApplicationCommandType.ChatInput,
     async run(interaction: CommandInteraction, client: MyClient) {
         try {
