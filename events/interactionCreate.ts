@@ -4,7 +4,7 @@ import {
     ChannelType
 } from 'discord.js';
 import MyClient from "../lib/types/class/MyClient";
-import { run } from "../buttons/ban-bot";
+import { run } from "../buttons/ban-bots";
 import noDMCommand from "../lib/utils/noDMCommand";
 
 export default {
