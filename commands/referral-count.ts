@@ -12,8 +12,8 @@ import undefMember from "../lib/utils/undefMember";
 import config from "../config";
 
 export default {
-    name: "invites",
-    description: "View invitations",
+    name: "referral-count",
+    description: "View referral count of a specified user",
     options: [
         {
             name: "member",
