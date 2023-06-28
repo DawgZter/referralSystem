@@ -15,7 +15,7 @@ import config from "../config";
 
 export default {
     name: "remove-referrals",
-    description: "Remove invitations from a member",
+    description: "Remove referral count from a member",
     options: [
         {
             name: "member",
