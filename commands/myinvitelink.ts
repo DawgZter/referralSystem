@@ -53,7 +53,7 @@ export default {
 
             const embed = new EmbedBuilder()
                 .setTitle("Success!")
-                .setDescription(`**${member.user.username}** your invitation **link** for this server is *${inv.code}*`)
+                .setDescription(`**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
             return interaction.editReply({ embeds: [embed] })
