@@ -70,22 +70,24 @@ export default {
 },
 
     getWhoUsed(code: string, guild: Snowflake): Promise<WhoUsed> {
-        return new Promise<WhoUsed>((resolve, reject) => {
-            const query = `
-                SELECT * FROM invites WHERE guild = ? AND code = ?
-            `;
+    return new Promise<WhoUsed>((resolve, reject) => {
+        const query = `
+            SELECT * FROM invites WHERE guild = ? AND code = ?
+        `;
 
-            connection.mysql.query(query, [guild, code], (error: MysqlError | null, results: Array<InviteResultsRow>) => {
-                if (error) reject(error);
-                const members: WhoUsed = {};
-                for (let i = 0; i < results.length; i++) {
-                    const result = results[i];
+        connection.mysql.query(query, [guild, code], (error: MysqlError | null, results: Array<InviteResultsRow>) => {
+            if (error) reject(error);
+            const members: WhoUsed = {};
+            for (let i = 0; i < results.length; i++) {
+                const result = results[i];
+                if (result) {
                     members[result.user] = result.fake === 1;
                 }
-                resolve(members);
-            });
+            }
+            resolve(members);
         });
-    },
+    });
+},
 
     /**
      *
