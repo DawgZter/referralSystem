@@ -41,33 +41,33 @@ export default {
      * @throws {MysqlError}
      */
     getInvites(inviter: Snowflake, guild: Snowflake): Promise<InviteStats> {
-        return new Promise<InviteStats>((resolve, reject) => {
-            const query = `
-                SELECT
-                    (SELECT COUNT(*) FROM invites WHERE inviter = ? AND guild = ?) AS total,
-                    (SELECT COUNT(*) FROM leaves WHERE inviter = ? AND guild = ? AND fake = 0) AS leaves,
-                    (SELECT SUM(bonus) FROM bonus WHERE user = ? AND guild = ?) AS bonus,
-                    (SELECT COUNT(*) FROM invites WHERE inviter = ? AND guild = ? AND fake = 1) AS fake
-            `;
+    return new Promise<InviteStats>((resolve, reject) => {
+        const query = `
+            SELECT
+                (SELECT COUNT(*) FROM invites WHERE inviter = ? AND guild = ? AND active = 1) AS total,
+                (SELECT COUNT(*) FROM leaves WHERE inviter = ? AND guild = ? AND fake = 0) AS leaves,
+                (SELECT SUM(bonus) FROM bonus WHERE user = ? AND guild = ?) AS bonus,
+                (SELECT COUNT(*) FROM invites WHERE inviter = ? AND guild = ? AND fake = 1) AS fake
+        `;
 
-            connection.mysql.query(query, [inviter, guild, inviter, guild, inviter, guild, inviter, guild], (error: MysqlError | null, results: Array<InviteResults>) => {
-                if (error) reject(error);
+        connection.mysql.query(query, [inviter, guild, inviter, guild, inviter, guild, inviter, guild], (error: MysqlError | null, results: Array<InviteResults>) => {
+            if (error) reject(error);
 
-                const inviteStats = results[0];
-                const { total = 0, leaves = 0, bonus = 0, fake = 0 } = inviteStats;
+            const inviteStats = results[0];
+            const { total = 0, leaves = 0, bonus = 0, fake = 0 } = inviteStats;
 
-                const invites = total - leaves + (bonus ?? 0) - fake;
+            const invites = total - leaves + (bonus ?? 0) - fake;
 
-                resolve({
-                    total,
-                    invites,
-                    leaves,
-                    fake,
-                    bonus: bonus ?? 0
-                });
+            resolve({
+                total,
+                invites,
+                leaves,
+                fake,
+                bonus: bonus ?? 0
             });
         });
-    },
+    });
+},
 
     getWhoUsed(code: string, guild: Snowflake): Promise<WhoUsed> {
         return new Promise<WhoUsed>((resolve, reject) => {
