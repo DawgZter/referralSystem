@@ -21,7 +21,7 @@ export default {
                 .setTitle("Success!")
                 .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
-                .setColor("Red")
+                .setColor("DarkGreen")
             return interaction.editReply({ embeds: [embed] })
         }
 
