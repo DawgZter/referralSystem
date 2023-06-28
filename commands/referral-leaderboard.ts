@@ -43,6 +43,7 @@ export default {
                 .setColor("DarkGreen")
             return interaction.editReply({ embeds: [embed] });
         } catch (error: any) {
+            console.log(error);
             const embed = new EmbedBuilder()
                 .setTitle("Error!")
                 .setDescription(`**${interaction.member}** unable to **retrieve** the leaderboard.`)
