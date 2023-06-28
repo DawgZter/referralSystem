@@ -272,26 +272,30 @@ export default {
      * @throws {MysqlError}
      */
     leaderboard(guild: Snowflake): Promise<LeaderboardStats> {
-        return new Promise<LeaderboardStats>((resolve, reject) => {
-            const query = `
-                SELECT 
-                    i.inviter, 
-                    COALESCE(i.total_invites, 0) - COALESCE(l.total_leaves, 0) + COALESCE(b.total_bonus, 0) AS total 
-                FROM 
-                    (SELECT inviter, COUNT(inviter) - SUM(fake) AS total_invites FROM invites WHERE guild = ? AND fake = 0 GROUP BY inviter) AS i
-                    LEFT JOIN (SELECT inviter, COUNT(inviter) AS total_leaves FROM leaves WHERE guild = ? AND fake = 0 GROUP BY inviter) AS l ON i.inviter = l.inviter
-                    LEFT JOIN (SELECT user, SUM(bonus) AS total_bonus FROM bonus WHERE guild = ? GROUP BY user) AS b ON i.inviter = b.user
-            `;
+    return new Promise<LeaderboardStats>((resolve, reject) => {
+        const query = `
+            SELECT 
+                i.inviter, 
+                COALESCE(i.total_invites, 0) - COALESCE(l.total_leaves, 0) + COALESCE(b.total_bonus, 0) AS total 
+            FROM 
+                (SELECT inviter, COUNT(inviter) - SUM(fake) AS total_invites FROM invites WHERE guild = ? AND fake = 0 GROUP BY inviter) AS i
+                LEFT JOIN (SELECT inviter, COUNT(inviter) AS total_leaves FROM leaves WHERE guild = ? AND fake = 0 GROUP BY inviter) AS l ON i.inviter = l.inviter
+                LEFT JOIN (SELECT user, SUM(bonus) AS total_bonus FROM bonus WHERE guild = ? GROUP BY user) AS b ON i.inviter = b.user
+        `;
 
-            connection.mysql.query(query, [guild, guild, guild], (error: MysqlError | null, results: Array<LeaderboardResults>) => {
-                if (error) reject(error);
-                const invites: LeaderboardStats = {};
-                for (let i = 0; i < results.length; i++) {
-                    const result = results[i];
-                    invites[result.inviter] = result.total;
-                }
-                resolve(invites);
-            });
+        connection.mysql.query(query, [guild, guild, guild], (error: MysqlError | null, results: Array<LeaderboardResults>) => {
+            if (error) reject(error);
+            if (!results) {
+                resolve({});
+                return;
+            }
+            const invites: LeaderboardStats = {};
+            for (let i = 0; i < results.length; i++) {
+                const result = results[i];
+                invites[result.inviter] = result.total;
+            }
+            resolve(invites);
         });
-    }
+    });
+}
 }
