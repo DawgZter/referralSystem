@@ -52,7 +52,7 @@ export default {
                         await inviteSync.add(member.user.id, inviter.id, member.guild.id, invite!.code, 1);
                         return youngAccount(member, inviter, client, true);
                     }
-
+                    console.log(`Adding invite: user=${member.user.id}, inviter=${inviter.id}, guild=${member.guild.id}, code=${invite!.code}, fake=${fake}`);
                     await inviteSync.add(member.user.id, inviter.id, member.guild.id, invite!.code, 0);
 
                     if (isSetup) {
