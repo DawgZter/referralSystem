@@ -129,6 +129,7 @@ export default {
                         }
                         connection.mysql.commit((error3: MysqlError | null) => {
                             if (error3) {
+                                console.log(`Error when inserting invite: ${error3}`);
                                 connection.mysql.rollback(() => {
                                     reject(error3);
                                 });
