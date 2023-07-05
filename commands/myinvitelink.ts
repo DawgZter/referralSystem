@@ -71,11 +71,11 @@ export default {
                         .setStyle('SECONDARY')
                 );
 
-            const m = await interaction.followUp({ embeds: [embed], components: [row], fetchReply: true  })
+            await interaction.editReply({ embeds: [embed], components: [row], ephemeral: true })
 
             const iFilter = i => i.user.id === interaction.user.id;
 
-            const collector = m.createMessageComponentCollector({ filter: iFilter, time: 10 * 60000 });
+            const collector = interaction.channel.createMessageComponentCollector({ filter: iFilter, time: 10 * 60000 });
 
             collector.on('collect', async(i) => {
                 if (i.customId === 'perms') {
