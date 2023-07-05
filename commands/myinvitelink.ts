@@ -62,30 +62,7 @@ export default {
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
 
-            const row = new MessageActionRow()
-                .addComponents(
-                    new MessageButton()
-                        .setLabel(`Permissões`)
-                        .setEmoji(`${client.emoji.perms}`)
-                        .setCustomId('perms')
-                        .setStyle('SECONDARY')
-                );
-
-            await interaction.editReply({ embeds: [embed], components: [row], ephemeral: true })
-
-            const iFilter = i => i.user.id === interaction.user.id;
-
-            const collector = interaction.channel.createMessageComponentCollector({ filter: iFilter, time: 10 * 60000 });
-
-            collector.on('collect', async(i) => {
-                if (i.customId === 'perms') {
-                    i.deferUpdate();
-                    i.reply({
-                        content: `**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``,
-                        ephemeral: true
-                    });
-                }
-            });
+            interaction.editReply({ embeds: [embed], ephemeral: true });
         });
     }
 }
