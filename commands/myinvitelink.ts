@@ -22,7 +22,7 @@ export default {
                 .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
-            return interaction.editReply({ embeds: [embed] })
+            return interaction.reply({ embeds: [embed], ephemeral: true })
         }
 
         interaction.guild?.invites.create(interaction.channel!.id, {
@@ -46,7 +46,7 @@ export default {
                     .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                     .setColor("Red")
                 if (config.handleError) embed.addFields({ name: "Console", value: error.message })
-                return interaction.editReply({ embeds: [embed] });
+                return interaction.reply({ embeds: [embed], ephemeral: true });
             }
             links.set(inv.code, member.user.id);
             client.cache.links.set(interaction.guild!.id, links);
@@ -56,7 +56,7 @@ export default {
                 .setDescription(`**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
-            return interaction.editReply({ embeds: [embed] })
+            return interaction.reply({ embeds: [embed], ephemeral: true })
         });
     }
 }
