@@ -14,7 +14,6 @@ export default {
     async run(interaction: CommandInteraction, client: MyClient) {
         const member: GuildMember = interaction.member as GuildMember;
         const links = client.cache.links.get(interaction.guild!.id)!;
-        await interaction.deferReply({ ephemeral: true }); // Defer the reply here only once
 
         if (Array.from(links.values()).includes(member.user.id)) {
             const code = Array.from(links.entries()).find(([code, memberId]) => memberId === member.user.id)!;
