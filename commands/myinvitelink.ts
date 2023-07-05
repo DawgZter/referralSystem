@@ -2,6 +2,9 @@ import {
     ApplicationCommandType,
     CommandInteraction, EmbedBuilder,
     GuildMember,
+    MessageActionRow,
+    MessageButton,
+    MessageEmbed
 } from "discord.js";
 import MyClient from "../lib/types/class/MyClient";
 import config from "../config";
@@ -31,7 +34,7 @@ export default {
             maxAge: 0,
             temporary: false,
             unique: false
-        }).then((inv) => {
+        }).then(async (inv) => {
             client.cache.invites.get(interaction.guild!.id)!.set(inv.code, {
                 uses: inv.uses!,
                 memberId: member.user.id
@@ -58,7 +61,31 @@ export default {
                 .setDescription(`**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
-            return interaction.editReply({ embeds: [embed] })
+
+            const row = new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setLabel(`Permissões`)
+                        .setEmoji(`${client.emoji.perms}`)
+                        .setCustomId('perms')
+                        .setStyle('SECONDARY')
+                );
+
+            const m = await interaction.followUp({ embeds: [embed], components: [row], fetchReply: true  })
+
+            const iFilter = i => i.user.id === interaction.user.id;
+
+            const collector = m.createMessageComponentCollector({ filter: iFilter, time: 10 * 60000 });
+
+            collector.on('collect', async(i) => {
+                if (i.customId === 'perms') {
+                    i.deferUpdate();
+                    i.reply({
+                        content: `**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``,
+                        ephemeral: true
+                    });
+                }
+            });
         });
     }
 }
