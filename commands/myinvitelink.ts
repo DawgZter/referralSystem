@@ -51,7 +51,7 @@ export default {
                     .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                     .setColor("Red")
                 if (config.handleError) embed.addFields({ name: "Console", value: error.message })
-                return interaction.editReply({ embeds: [embed] });
+                return interaction.reply({ embeds: [embed], ephemeral: true });
             }
             links.set(inv.code, member.user.id);
             client.cache.links.set(interaction.guild!.id, links);
@@ -62,7 +62,7 @@ export default {
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
 
-            interaction.editReply({ embeds: [embed], ephemeral: true });
+            interaction.reply({ embeds: [embed], ephemeral: true });
         });
     }
 }
