@@ -14,6 +14,8 @@ export default {
     async run(interaction: CommandInteraction, client: MyClient) {
         const member: GuildMember = interaction.member as GuildMember;
         const links = client.cache.links.get(interaction.guild!.id)!;
+        await interaction.deferReply({ ephemeral: true }); // Defer the reply here only once
+
         if (Array.from(links.values()).includes(member.user.id)) {
             const code = Array.from(links.entries()).find(([code, memberId]) => memberId === member.user.id)!;
             const embed = new EmbedBuilder()
@@ -21,11 +23,8 @@ export default {
                 .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen");
-            await interaction.deferReply({ ephemeral: true });
             return interaction.editReply({ embeds: [embed] });
         }
-
-        await interaction.deferReply({ ephemeral: true });
 
         interaction.guild?.invites.create(interaction.channel!.id, {
             maxAge: 0,
