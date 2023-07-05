@@ -15,6 +15,8 @@ export default {
         const member: GuildMember = interaction.member as GuildMember;
         const links = client.cache.links.get(interaction.guild!.id)!;
 
+        await interaction.deferReply({ephemeral: true});
+
         if (Array.from(links.values()).includes(member.user.id)) {
             const code = Array.from(links.entries()).find(([code, memberId]) => memberId === member.user.id)!;
             const embed = new EmbedBuilder()
@@ -22,7 +24,7 @@ export default {
                 .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
-            return interaction.reply({ embeds: [embed], ephemeral: true })
+            return interaction.editReply({ embeds: [embed] })
         }
 
         interaction.guild?.invites.create(interaction.channel!.id, {
@@ -46,7 +48,7 @@ export default {
                     .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                     .setColor("Red")
                 if (config.handleError) embed.addFields({ name: "Console", value: error.message })
-                return interaction.reply({ embeds: [embed], ephemeral: true });
+                return interaction.editReply({ embeds: [embed] });
             }
             links.set(inv.code, member.user.id);
             client.cache.links.set(interaction.guild!.id, links);
@@ -56,7 +58,7 @@ export default {
                 .setDescription(`**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
-            return interaction.reply({ embeds: [embed], ephemeral: true })
+            return interaction.editReply({ embeds: [embed] })
         });
     }
 }
