@@ -24,7 +24,7 @@ export default {
             const code = Array.from(links.entries()).find(([code, memberId]) => memberId === member.user.id)!;
             const embed = new EmbedBuilder()
                 .setTitle("Success!")
-                .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
+                .setDescription(`**${member.user.username}**, you already have an invite link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
             return interaction.editReply({ embeds: [embed] })
@@ -51,7 +51,7 @@ export default {
                     .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                     .setColor("Red")
                 if (config.handleError) embed.addFields({ name: "Console", value: error.message })
-                return interaction.reply({ embeds: [embed], ephemeral: true });
+                return interaction.followUp({ embeds: [embed], ephemeral: true });
             }
             links.set(inv.code, member.user.id);
             client.cache.links.set(interaction.guild!.id, links);
@@ -62,7 +62,7 @@ export default {
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
                 .setColor("DarkGreen")
 
-            interaction.reply({ embeds: [embed], ephemeral: true });
+            interaction.followUp({ embeds: [embed], ephemeral: true });
         });
     }
 }
