@@ -6,6 +6,7 @@ import {
 import MyClient from "../lib/types/class/MyClient";
 import config from "../config";
 import linkSync from "../lib/sync/link";
+
 export default {
     name: "myinvitelink",
     description: "Create an invitation link that never expires",
@@ -19,9 +20,12 @@ export default {
                 .setTitle("Success!")
                 .setDescription(`**${member.user.username}**, you already have an invitation link:\n\`\`https://discord.gg/${code[0]}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
-                .setColor("DarkGreen")
-            return interaction.reply({ embeds: [embed], ephemeral: true })
+                .setColor("DarkGreen");
+            await interaction.deferReply({ ephemeral: true });
+            return interaction.editReply({ embeds: [embed] });
         }
+
+        await interaction.deferReply({ ephemeral: true });
 
         interaction.guild?.invites.create(interaction.channel!.id, {
             maxAge: 0,
@@ -40,9 +44,9 @@ export default {
                     .setTitle("Error!")
                     .setDescription(`${member} unable to **save** invitation code.`)
                     .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
-                    .setColor("Red")
-                if (config.handleError) embed.addFields({ name: "Console", value: error.message })
-                return interaction.reply({ embeds: [embed], ephemeral: true });
+                    .setColor("Red");
+                if (config.handleError) embed.addFields({ name: "Console", value: error.message });
+                return interaction.editReply({ embeds: [embed] });
             }
             links.set(inv.code, member.user.id);
             client.cache.links.set(interaction.guild!.id, links);
@@ -50,8 +54,8 @@ export default {
                 .setTitle("Success!")
                 .setDescription(`**${member.user.username}**, your invitation link for this server is:\n\`\`https://discord.gg/${inv.code}\`\``)
                 .setFooter({ text: config.message.footer, iconURL: client.user!.displayAvatarURL() })
-                .setColor("DarkGreen")
-            return interaction.reply({ embeds: [embed], ephemeral: true })
+                .setColor("DarkGreen");
+            return interaction.editReply({ embeds: [embed] });
         });
     }
 }
