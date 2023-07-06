@@ -1,4 +1,3 @@
-  GNU nano 6.2                                                                                                                                                     connection.ts                                                                                                                                                              
 import {
     createConnection,
     Connection
@@ -13,8 +12,9 @@ const options = {
 };
 
 const uri = `mysql://${options.user}:${options.password}@${options.host}:${options.port}/${options.database}`;
-
 const mysql: Connection = createConnection(uri);
+console.log('Database connected: ', mysql.state); // This should print "connected"
+
 export default {
     mysql,
     async executeQueries(): Promise<void> {
