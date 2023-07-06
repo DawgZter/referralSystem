@@ -1,3 +1,4 @@
+  GNU nano 6.2                                                                                                                                                     connection.ts                                                                                                                                                              
 import {
     createConnection,
     Connection
@@ -6,7 +7,7 @@ import {
 const options = {
     host: process.env.HOST,
     port: process.env.PORT ? Number(process.env.PORT) : 3306,
-    user: process.env.USER,
+    user: process.env.DB_USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE
 };
@@ -14,8 +15,6 @@ const options = {
 const uri = `mysql://${options.user}:${options.password}@${options.host}:${options.port}/${options.database}`;
 
 const mysql: Connection = createConnection(uri);
-console.log('Database connected: ', mysql.state); // This should print "connected"
-
 export default {
     mysql,
     async executeQueries(): Promise<void> {
