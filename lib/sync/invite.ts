@@ -101,46 +101,60 @@ export default {
      * @throws {MysqlError}
      */
     add(user: Snowflake, inviter: Snowflake, guild: Snowflake, code: string, fake: number): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            const queries = [
-                `SELECT * FROM leaves WHERE user = ? AND guild = ? AND inactive = 0`,
-                `UPDATE leaves SET inactive = 1 WHERE id = ?`,
-                `INSERT INTO invites (user, guild, inviter, code, fake, inactive) VALUES (?, ?, ?, ?, ?, 0)`
-            ];
+    return new Promise<void>((resolve, reject) => {
+        const queries = [
+            `SELECT * FROM leaves WHERE user = ? AND guild = ? AND inactive = 0`,
+            `UPDATE leaves SET inactive = 1 WHERE id = ?`,
+            `INSERT INTO invites (user, guild, inviter, code, fake, inactive) VALUES (?, ?, ?, ?, ?, 0)`
+        ];
 
-            connection.mysql.beginTransaction((error: MysqlError | null) => {
-                if (error) reject(error);
-                connection.mysql.query(queries[0], [inviter, guild], (error1: MysqlError | null, results: Array<InviteResultsRow>) => {
-                    if (error1) reject(error1);
-                    if (results && results[0]) {
-                        connection.mysql.query(queries[1], [results[0].id], (error2: MysqlError | null) => {
-                            if (error2) {
-                                connection.mysql.rollback(() => {
-                                    reject(error2)
-                                });
-                            }
-                        });
-                    }
-                    connection.mysql.query(queries[2], [user, guild, inviter, code, fake], (error2: MysqlError | null) => {
+        connection.mysql.beginTransaction((error: MysqlError | null) => {
+            if (error) {
+                console.log('Transaction start error', error);
+                reject(error);
+            }
+
+            connection.mysql.query(queries[0], [user, guild], (error1: MysqlError | null, results: Array<InviteResultsRow>) => {
+                if (error1) {
+                    console.log('Query 1 error', error1);
+                    connection.mysql.rollback(() => {
+                        reject(error1);
+                    });
+                }
+
+                if (results && results[0]) {
+                    connection.mysql.query(queries[1], [results[0].id], (error2: MysqlError | null) => {
                         if (error2) {
+                            console.log('Query 2 error', error2);
                             connection.mysql.rollback(() => {
                                 reject(error2);
                             });
                         }
-                        connection.mysql.commit((error3: MysqlError | null) => {
-                            if (error3) {
-                                console.log(`Error when inserting invite: ${error3}`);
-                                connection.mysql.rollback(() => {
-                                    reject(error3);
-                                });
-                            }
-                            resolve();
+                    });
+                }
+
+                connection.mysql.query(queries[2], [user, guild, inviter, code, fake], (error2: MysqlError | null) => {
+                    if (error2) {
+                        console.log('Query 3 error', error2);
+                        connection.mysql.rollback(() => {
+                            reject(error2);
                         });
+                    }
+
+                    connection.mysql.commit((error3: MysqlError | null) => {
+                        if (error3) {
+                            console.log('Commit error', error3);
+                            connection.mysql.rollback(() => {
+                                reject(error3);
+                            });
+                        }
+                        resolve();
                     });
                 });
             });
         });
-    },
+    });
+}
 
     /**
      *
@@ -203,45 +217,62 @@ export default {
      * @throws {MysqlError}
      */
     remove(user: Snowflake, inviter: Snowflake, guild: Snowflake): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            const queries = [
-                `SELECT * FROM invites WHERE user = ? AND guild = ? AND inactive = 0`,
-                `UPDATE invites SET inactive = 1 WHERE id = ?`,
-                `INSERT INTO leaves (user, guild, inviter, code, fake, inactive) VALUES (?, ?, ?, ?, ?, 0)`
-            ];
+    return new Promise<void>((resolve, reject) => {
+        const queries = [
+            `SELECT * FROM invites WHERE user = ? AND guild = ? AND inactive = 0`,
+            `UPDATE invites SET inactive = 1 WHERE id = ?`,
+            `INSERT INTO leaves (user, guild, inviter, code, fake, inactive) VALUES (?, ?, ?, ?, ?, 0)`
+        ];
 
-            connection.mysql.beginTransaction((error: MysqlError | null) => {
-                if (error) reject(error);
-                connection.mysql.query(queries[0], [user, guild], (error1: MysqlError | null, results: Array<InviteResultsRow>) => {
-                    if (error1) reject(error1);
-                    if (results && results[0]) {
-                        connection.mysql.query(queries[1], [results[0].id], (error2: MysqlError | null) => {
-                            if (error2) {
-                                connection.mysql.rollback(() => {
-                                    reject(error2);
-                                });
-                            }
-                        });
-                        connection.mysql.query(queries[2], [user, guild, inviter, results[0].code, results[0].fake], (error3: MysqlError | null) => {
-                            if (error3) {
-                                connection.mysql.rollback(() => {
-                                    reject(error3);
-                                });
-                            }
-                            connection.mysql.commit((error4: MysqlError | null) => {
-                                if (error4) {
-                                    connection.mysql.rollback(() => {
-                                        reject(error4);
-                                    });
-                                }
-                                resolve();
+        connection.mysql.beginTransaction((error: MysqlError | null) => {
+            if (error) {
+                console.log('Transaction start error', error);
+                reject(error);
+            }
+
+            connection.mysql.query(queries[0], [user, guild], (error1: MysqlError | null, results: Array<InviteResultsRow>) => {
+                if (error1) {
+                    console.log('Query 1 error', error1);
+                    connection.mysql.rollback(() => {
+                        reject(error1);
+                    });
+                }
+
+                if (results && results[0]) {
+                    connection.mysql.query(queries[1], [results[0].id], (error2: MysqlError | null) => {
+                        if (error2) {
+                            console.log('Query 2 error', error2);
+                            connection.mysql.rollback(() => {
+                                reject(error2);
                             });
+                        }
+                    });
+
+                    connection.mysql.query(queries[2], [user, guild, inviter, results[0].code, results[0].fake], (error3: MysqlError | null) => {
+                        if (error3) {
+                            console.log('Query 3 error', error3);
+                            connection.mysql.rollback(() => {
+                                reject(error3);
+                            });
+                        }
+
+                        connection.mysql.commit((error4: MysqlError | null) => {
+                            if (error4) {
+                                console.log('Commit error', error4);
+                                connection.mysql.rollback(() => {
+                                    reject(error4);
+                                });
+                            }
+                            resolve();
                         });
-                    } else reject(new Error("No inviter found"));
-                });
+                    });
+                } else {
+                    reject(new Error("No inviter found"));
+                }
             });
         });
-    },
+    });
+}
 
     /**
      *
