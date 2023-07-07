@@ -19,18 +19,21 @@ export default {
      * @throws {MysqlError}
      */
     getInviter(user: Snowflake, guild: Snowflake): Promise<Snowflake> {
-        return new Promise<Snowflake>((resolve, reject) => {
-            const query = `
-                SELECT * FROM invites WHERE user = ? AND guild = ? AND inactive = 0
-            `;
+    return new Promise<Snowflake>((resolve, reject) => {
+        const query = `
+            SELECT * FROM invites WHERE user = ? AND guild = ? AND inactive = 0
+        `;
 
-            connection.mysql.query(query, [user, guild], (error: MysqlError | null, results: Array<InviteResultsRow>) => {
-                if (error) reject(error);
-                if (results && results[0]) resolve(results[0].inviter);
-                reject(new Error("No inviter found"));
-            });
+        connection.mysql.query(query, [user, guild], (error: MysqlError | null, results: Array<InviteResultsRow>) => {
+            if (error) reject(error);
+            if (results && results[0]) {
+                resolve(results[0].inviter);
+            } else {
+                resolve(null); // or any other default value
+            }
         });
-    },
+    });
+},
 
     /**
      *
