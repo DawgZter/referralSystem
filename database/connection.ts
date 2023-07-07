@@ -16,11 +16,13 @@ const uri = `mysql://${options.user}:${options.password}@${options.host}:${optio
 console.log(uri);
 const mysql: Connection = createConnection(uri);
 
-mysql.on('error', function(err) {
-  console.log('Database error: ', err);
+mysql.connect((err) => {
+    if (err) {
+        console.error('Error connecting to Db');
+        return console.error(err.message);
+    }
+    console.log('Database connected: ', mysql.state); // This should print "connected"
 });
-
-console.log('Database connected: ', mysql.state); // This should print "connected"
 
 export default {
     mysql,
