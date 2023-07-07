@@ -29,7 +29,7 @@ export default {
             if (results && results[0]) {
                 resolve(results[0].inviter);
             } else {
-                resolve(null); // or any other default value
+                reject(new Error("No inviter found"));
             }
         });
     });
