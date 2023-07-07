@@ -1,7 +1,4 @@
-import {
-    createConnection,
-    Connection
-} from "mysql";
+import { createConnection, Connection } from "mysql";
 
 const options = {
     host: process.env.HOST,
@@ -71,7 +68,12 @@ export default {
 
         for (let query of queries) {
             try {
-                await mysql.query(query);
+                await new Promise((resolve, reject) => {
+                    mysql.query(query, (err, results, fields) => {
+                        if (err) reject(err);
+                        resolve(results);
+                    });
+                });
             } catch (error) {
                 console.log(error);
             }
