@@ -11,7 +11,9 @@ const options = {
     database: process.env.DATABASE
 };
 
+console.log(options);
 const uri = `mysql://${options.user}:${options.password}@${options.host}:${options.port}/${options.database}`;
+console.log(uri);
 const mysql: Connection = createConnection(uri);
 console.log('Database connected: ', mysql.state); // This should print "connected"
 
