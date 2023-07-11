@@ -13,8 +13,8 @@ export default {
             // The member role has been added, update the database
             connection.mysql.query(`
                 UPDATE invites 
-                SET active = 1 
-                WHERE user = '${newMember.id}' AND guild = '${newMember.guild.id}' AND active = 0
+                SET inactive = 0 
+                WHERE user = '${newMember.id}' AND guild = '${newMember.guild.id}' AND inactive = 1
             `, (error, results) => {
                 if (error) {
                     console.error(error);
