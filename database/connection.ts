@@ -63,6 +63,10 @@ export default {
                 welcome varchar(25) DEFAULT 'undefined' NOT NULL,
                 \`leave\` varchar(25) DEFAULT 'undefined' NOT NULL,
                 log varchar(25) DEFAULT 'undefined' NOT NULL
+            );`,
+            `CREATE TABLE IF NOT EXISTS users (
+                id INT(11) PRIMARY KEY AUTO_INCREMENT,
+                username VARCHAR(255) NOT NULL
             );`
         ];
 
