@@ -313,7 +313,7 @@ export default {
                 i.inviter, 
                 COALESCE(i.total_invites, 0) - COALESCE(l.total_leaves, 0) + COALESCE(b.total_bonus, 0) AS total 
             FROM 
-                (SELECT inviter, COUNT(inviter) - SUM(fake) AS total_invites FROM invites WHERE guild = ? AND fake = 0 AND inactive = 0 GROUP BY inviter) AS i
+                (SELECT inviter, COUNT(inviter) - SUM(fake) AS total_invites FROM invites WHERE guild = ? AND fake = 0 AND inactive = 1 GROUP BY inviter) AS i
                 LEFT JOIN (SELECT inviter, COUNT(inviter) AS total_leaves FROM leaves WHERE guild = ? AND fake = 0 GROUP BY inviter) AS l ON i.inviter = l.inviter
                 LEFT JOIN (SELECT user, SUM(bonus) AS total_bonus FROM bonus WHERE guild = ? GROUP BY user) AS b ON i.inviter = b.user
         `;
